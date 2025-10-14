@@ -12,7 +12,7 @@ public class RestRepositoryConfig implements RepositoryRestConfigurer {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-        config.getProjectionConfiguration().addProjection(Customer.class, CustomerProjection.class);
+        config.getProjectionConfiguration().addProjection(CustomerProjection.class);
         config.exposeIdsFor(Customer.class);
     }
 }
