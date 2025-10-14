@@ -20,7 +20,7 @@ public class CustomerServiceApplication {
     CommandLineRunner commandLineRunner(CustomerRepository repository) {
         return args -> {
             Stream.of("Hakim", "Jeremy", "Jessica", "Jane", "John", "Jacob", "Joshua", "Jason", "Jeremy").forEach(name -> {
-                repository.save(Customer.builder().name(name).email(name + "@example.com").build());
+                repository.save(Customer.builder().name(name).email(name + "@example.com").password("secretpassword").build());
             });
         };
     }
