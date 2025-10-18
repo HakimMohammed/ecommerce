@@ -1,0 +1,3 @@
+[submodule "ecommerce-configuration"]
+	path = ecommerce-configuration
+	url = git@github.com:HakimMohammed/Architecture-Micro-Services-Configuration.git
