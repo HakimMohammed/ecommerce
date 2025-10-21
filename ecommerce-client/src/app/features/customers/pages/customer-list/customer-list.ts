@@ -10,6 +10,7 @@ import {
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {finalize} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-customer-list',
@@ -20,6 +21,7 @@ import {finalize} from 'rxjs';
 })
 export class CustomerList implements OnInit {
   private customerService = inject(CustomerService);
+  private router = inject(Router);
 
   readonly customerList = signal<CustomerModel[]>([]);
   readonly isLoading = signal(false);
@@ -45,6 +47,10 @@ export class CustomerList implements OnInit {
     columns: this.columns,
     getCoreRowModel: getCoreRowModel(),
   }));
+
+  createCustomer() {
+    this.router.navigate(['/customers/create']);
+  }
 
   ngOnInit(): void {
     this.fetchCustomers();
