@@ -49,20 +49,41 @@
           </thead>
 
           <tbody>
-            @for (row of table.getRowModel().rows; track trackById) {
+            @for (row of table.getRowModel().rows; track row.id) {
               <tr class="odd:bg-white even:bg-gray-50 hover:bg-blue-500/10 transition">
                 @for (cell of row.getVisibleCells(); track cell.id) {
                   <td class="px-4 py-3 border-b border-r border-gray-200 last:border-r-0">
-                    <ng-container
-                      *flexRender="cell.column.columnDef.cell; props: cell.getContext(); let cell"
-                    >
-                      <div [innerHTML]="cell"></div>
-                    </ng-container>
+                    @if (cell.column.id === 'actions') {
+                      <!-- Our custom Angular buttons -->
+                      <div class="flex gap-2">
+                        <button
+                          class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition"
+                          (click)="editCustomer(row.original.id)"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
+                          (click)="deleteCustomer(row.original.id)"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    } @else {
+                      <!-- Regular data cells -->
+                      <ng-container
+                        *flexRender="cell.column.columnDef.cell; props: cell.getContext(); let cell"
+                      >
+                        <div [innerHTML]="cell"></div>
+                      </ng-container>
+                    }
                   </td>
                 }
               </tr>
             }
           </tbody>
+
+
         </table>
       }
     </div>

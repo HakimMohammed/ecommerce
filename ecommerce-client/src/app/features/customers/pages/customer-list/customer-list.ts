@@ -37,10 +37,12 @@ export class CustomerList implements OnInit {
   readonly canGoPrev = computed(() => this.pageNumber() > 0);
 
   readonly columns: ColumnDef<CustomerModel>[] = [
-    {accessorKey: 'id', header: 'ID', cell: (info) => info.getValue()},
-    {accessorKey: 'name', header: 'Name', cell: (info) => info.getValue()},
-    {accessorKey: 'email', header: 'Email', cell: (info) => info.getValue()},
+    {accessorKey: 'id', header: 'ID', cell: info => info.getValue()},
+    {accessorKey: 'name', header: 'Name', cell: info => info.getValue()},
+    {accessorKey: 'email', header: 'Email', cell: info => info.getValue()},
+    {id: 'actions', header: 'Actions'}
   ];
+
 
   readonly table = createAngularTable(() => ({
     data: this.customerList(),
@@ -52,11 +54,56 @@ export class CustomerList implements OnInit {
     this.router.navigate(['/customers/create']);
   }
 
-  ngOnInit(): void {
+  handleActionClick(event: Event) {
+    const target = event.target as HTMLElement;
+    const action = target.getAttribute('data-action');
+    const id = target.getAttribute('data-id');
+
+    if (!action || !id) return;
+
+    if (action === 'edit') {
+      this.editCustomer(id);
+    } else if (action === 'delete') {
+      this.deleteCustomer(id);
+    }
+  }
+
+
+  deleteCustomer(id: string) {
+    console.log(id);
+    confirm('Are you sure you want to delete this customer?') &&
+    this.customerService.deleteCustomer(id).subscribe(() => {
+      this.fetchCustomers();
+      document.dispatchEvent(new CustomEvent('basecoat:toast', {
+        detail: {
+          config: {
+            category: 'success',
+            title: 'Success',
+            description: 'A new customer has been deleted successfully.',
+            cancel: {
+              label: 'Dismiss'
+            }
+          }
+        }
+      }))
+    });
+  }
+
+  editCustomer(id: string) {
+    console.log(id);
+    // this.router.navigate(['/customers/edit', id]);
+  }
+
+  ngOnInit()
+    :
+    void {
     this.fetchCustomers();
   }
 
-  changePage(offset: number) {
+  changePage(offset
+             :
+             number
+  ) {
     const nextPage = this.pageNumber() + offset;
     if (nextPage >= 0 && nextPage < this.totalPages()) {
       this.pageNumber.set(nextPage);
@@ -88,6 +135,4 @@ export class CustomerList implements OnInit {
         this.totalPages.set(response.totalPages);
       });
   }
-
-  trackById = (_: number, item: CustomerModel) => item.id;
 }

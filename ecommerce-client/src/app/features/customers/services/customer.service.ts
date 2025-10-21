@@ -30,4 +30,8 @@ export class CustomerService {
   createCustomer(customer: CustomerModel): Observable<CustomerModel> {
     return this.http.post<CustomerModel>(environment.API_URL + this.API_SUFFIX, customer);
   }
+
+  deleteCustomer(id: string): Observable<void> {
+    return this.http.delete<void>(environment.API_URL + this.API_SUFFIX + '/' + id);
+  }
 }
