@@ -90,8 +90,7 @@ export class CustomerList implements OnInit {
   }
 
   editCustomer(id: string) {
-    console.log(id);
-    // this.router.navigate(['/customers/edit', id]);
+    this.router.navigate(['/customers/edit', id]);
   }
 
   ngOnInit()
