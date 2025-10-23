@@ -17,11 +17,7 @@ public class CustomerRestController {
     private final PagedResponseMapper pagedResponseMapper;
 
     @GetMapping("/customers")
-    public ResponseEntity<PagedResponse<Customer>> getCustomers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String keyword
-    ) {
+    public ResponseEntity<PagedResponse<Customer>> getCustomers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) String keyword) {
         Page<Customer> customers;
 
         if (keyword == null || keyword.isBlank()) {
@@ -33,5 +29,26 @@ public class CustomerRestController {
         return ResponseEntity.ok(pagedResponseMapper.toPagedResponse(customers));
     }
 
+    @GetMapping("/customers/{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable String id) {
+        Customer customer = customerService.getCustomerById(id);
+        return ResponseEntity.ok(customer);
+    }
 
+    @PostMapping("/customers")
+    public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customer) {
+        customerService.saveCustomer(customer);
+        return ResponseEntity.ok(customer);
+    }
+
+    @PutMapping("/customers/{id}")
+    public void updateCustomer(@PathVariable String id, @RequestBody Customer customer) {
+        customerService.updateCustomer(id, customer);
+    }
+
+    @DeleteMapping("/customers/{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable String id) {
+        customerService.deleteCustomer(id);
+        return ResponseEntity.noContent().build();
+    }
 }
