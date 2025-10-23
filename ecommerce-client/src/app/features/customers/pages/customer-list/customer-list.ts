@@ -11,11 +11,12 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {finalize} from 'rxjs';
 import {Router} from '@angular/router';
+import {CustomersDelete} from '../customers-delete/customers-delete';
 
 @Component({
   selector: 'app-customer-list',
   standalone: true,
-  imports: [CommonModule, FlexRenderDirective, FormsModule],
+  imports: [CommonModule, FlexRenderDirective, FormsModule, CustomersDelete],
   templateUrl: './customer-list.html',
   styleUrls: ['./customer-list.css'],
 })
@@ -28,6 +29,9 @@ export class CustomerList implements OnInit {
   readonly pageNumber = signal(0);
   readonly sizePerPage = 10;
   readonly totalPages = signal(0);
+
+  isDeleteModalOpen = signal<boolean>(false);
+  customerToDelete = signal<string>('');
 
   keyword = '';
 
@@ -54,39 +58,16 @@ export class CustomerList implements OnInit {
     this.router.navigate(['/customers/create']);
   }
 
-  handleActionClick(event: Event) {
-    const target = event.target as HTMLElement;
-    const action = target.getAttribute('data-action');
-    const id = target.getAttribute('data-id');
-
-    if (!action || !id) return;
-
-    if (action === 'edit') {
-      this.editCustomer(id);
-    } else if (action === 'delete') {
-      this.deleteCustomer(id);
-    }
-  }
-
 
   deleteCustomer(id: string) {
-    console.log(id);
-    confirm('Are you sure you want to delete this customer?') &&
-    this.customerService.deleteCustomer(id).subscribe(() => {
-      this.fetchCustomers();
-      document.dispatchEvent(new CustomEvent('basecoat:toast', {
-        detail: {
-          config: {
-            category: 'success',
-            title: 'Success',
-            description: 'A new customer has been deleted successfully.',
-            cancel: {
-              label: 'Dismiss'
-            }
-          }
-        }
-      }))
-    });
+    this.customerToDelete.set(id);
+    this.isDeleteModalOpen.set(true);
+    this.fetchCustomers();
+  }
+
+  cancelDelete() {
+    this.isDeleteModalOpen.set(false);
+    this.customerToDelete.set('');
   }
 
   editCustomer(id: string) {

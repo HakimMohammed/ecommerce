@@ -1,0 +1,65 @@
+<header
+  class=" flex
+    justify-between
+    items-center
+    w-full
+    bg-blue-600
+    text-white
+    px-6
+    py-3
+    shadow-lg
+    fixed
+    top-0
+    left-0
+    mb-20
+  "
+>
+  <div class="navbar-brand">
+    <a routerLink="/" class="logo-link text-xl font-bold hover:text-white/80 transition-colors">
+      <span class="logo-text">Your Brand</span>
+    </a>
+  </div>
+
+  <nav class="navbar-links">
+    <ul class="flex space-x-6">
+      <li>
+        <a
+          routerLink="/customers"
+          routerLinkActive="bg-white/10 text-white rounded-md"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="px-4 py-2 hover:bg-white/10 transition-colors duration-200"
+        >
+          Customers
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/reports"
+          routerLinkActive="bg-white/10 text-white rounded-md"
+          class="px-4 py-2 hover:bg-white/10 transition-colors duration-200"
+        >
+          Reports
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="navbar-user flex items-center space-x-4">
+    <span class="user-name text-sm font-light">Welcome, John Doe</span>
+    <button
+      class="
+        bg-white
+        text-blue-600
+        font-semibold
+        px-4
+        py-1.5
+        rounded-lg
+        shadow-md
+        hover:bg-gray-100
+        transition-colors
+      "
+    >
+      Logout
+    </button>
+  </div>
+</header>

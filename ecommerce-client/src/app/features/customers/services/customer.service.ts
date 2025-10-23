@@ -1,9 +1,10 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {PaginatedResponse} from '../../../shared/interfaces/paginated-response';
-import {CustomerModel} from '../customer.model';
+import {CustomerModel, CustomerUpdateModel} from '../customer.model';
 import {environment} from '../../../../environments/environment';
 import {Observable} from 'rxjs';
+import {CustomerUpdate} from '../pages/customer-update/customer-update';
 
 @Injectable({
   providedIn: 'root',
@@ -33,5 +34,13 @@ export class CustomerService {
 
   deleteCustomer(id: string): Observable<void> {
     return this.http.delete<void>(environment.API_URL + this.API_SUFFIX + '/' + id);
+  }
+
+  getCustomerById(id: string): Observable<CustomerModel> {
+    return this.http.get<CustomerModel>(environment.API_URL + this.API_SUFFIX + '/' + id);
+  }
+
+  updateCustomer(id: string, customer: CustomerUpdateModel): Observable<void> {
+    return this.http.put<void>(environment.API_URL + this.API_SUFFIX + '/' + id, customer);
   }
 }

@@ -3,3 +3,8 @@ export interface CustomerModel {
   name: string;
   email: string;
 }
+
+export interface CustomerUpdateModel {
+  name: string;
+  email: string;
+}

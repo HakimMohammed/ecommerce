@@ -116,3 +116,10 @@
     </div>
   </div>
 </div>
+
+@if (isDeleteModalOpen()) {
+  <app-customers-delete
+    [customerID]="customerToDelete()"
+    (cancel)="cancelDelete()"
+  ></app-customers-delete>
+}
