@@ -1,0 +1,127 @@
+<div class="flex flex-col bg-gray-100 text-black p-10 rounded-xl min-h-screen">
+
+  <div class="card px-10 py-4 bg-white text-black shadow-lg rounded-xl gap-y-0">
+
+    <header class="flex flex-col items-start -ms-4">
+      <h1 class="text-4xl font-bold text-blue-600">Product List</h1>
+      <p class="text-gray-500">Manage your products effectively</p>
+    </header>
+
+    <div class="flex justify-between items-center mt-6 mb-8">
+      <input
+        [(ngModel)]="keyword"
+        (ngModelChange)="onSearchChange()"
+        type="text"
+        placeholder="Search a product ..."
+        class="w-1/3 bg-white border border-gray-300 text-black placeholder-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button
+        (click)="createProduct()"
+        type="button"
+        class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-md"
+      >
+        Create Product
+      </button>
+    </div>
+
+    <div class="overflow-x-auto rounded-xl border border-gray-200">
+      @if (isLoading()) {
+        <p class="p-4 text-center text-gray-400">Loading products...</p>
+      } @else if (productList().length === 0) {
+        <p class="p-4 text-center text-gray-500 bg-white">No products found.</p>
+      } @else {
+        <table class="w-full border-collapse">
+          <thead>
+          <tr class="bg-blue-500 text-white">
+            @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+              @for (header of headerGroup.headers; track header.id) {
+                <th
+                  class="px-4 py-3 border-r border-blue-400 last:border-r-0 text-left font-semibold uppercase text-sm">
+                  <ng-container
+                    *flexRender="header.column.columnDef.header; props: header.getContext(); let header"
+                  >
+                    <div [innerHTML]="header"></div>
+                  </ng-container>
+                </th>
+              }
+            }
+          </tr>
+          </thead>
+
+          <tbody>
+            @for (row of table.getRowModel().rows; track row.id) {
+              <tr class="odd:bg-white even:bg-gray-50 hover:bg-blue-500/10 transition">
+                @for (cell of row.getVisibleCells(); track cell.id) {
+                  <td class="px-4 py-3 border-b border-r border-gray-200 last:border-r-0">
+                    @if (cell.column.id === 'actions') {
+                      <!-- Our custom Angular buttons -->
+                      <div class="flex gap-2">
+                        <button
+                          class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded transition"
+                          (click)="editProduct(row.original.id)"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
+                          (click)="deleteProduct(row.original.id)"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    } @else {
+                      <!-- Regular data cells -->
+                      <ng-container
+                        *flexRender="cell.column.columnDef.cell; props: cell.getContext(); let cell"
+                      >
+                        <div [innerHTML]="cell"></div>
+                      </ng-container>
+                    }
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+
+
+        </table>
+      }
+    </div>
+
+    <div class="flex justify-between items-center w-full mt-6">
+      <span class="text-gray-600 text-sm">
+        Showing <span class="text-blue-600 font-semibold">{{ pageNumber() + 1 }}</span> of
+        <span class="text-blue-600 font-semibold">{{ totalPages() }}</span> pages.
+      </span>
+
+      <div class="flex gap-3">
+        <button
+          type="button"
+          class="px-5 py-2 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-blue-600"
+          [disabled]="!canGoPrev()"
+          (click)="changePage(-1)"
+        >
+          Previous
+        </button>
+
+        <button
+          type="button"
+          class="px-5 py-2 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-blue-600"
+          [disabled]="!canGoNext()"
+          (click)="changePage(1)"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (isDeleteModalOpen()) {
+  <app-product-delete
+    [productID]="productToDelete()"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+  >
+  </app-product-delete>
+}
