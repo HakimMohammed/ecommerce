@@ -1,34 +1,18 @@
 <div class="flex flex-col bg-gray-100 text-black p-10 rounded-xl min-h-screen">
-
   <div class="card px-10 py-4 bg-white text-black shadow-lg rounded-xl gap-y-0">
-
     <header class="flex flex-col items-start -ms-4">
-      <h1 class="text-4xl font-bold text-blue-600">Customer List</h1>
-      <p class="text-gray-500">Manage your customers effectively</p>
+      <h1 class="text-4xl font-bold text-blue-600">Bills List</h1>
+      <p class="text-gray-500">Manage and review customer bills</p>
     </header>
 
     <div class="flex justify-between items-center mt-6 mb-8">
-      <input
-        [(ngModel)]="keyword"
-        (ngModelChange)="onSearchChange()"
-        type="text"
-        placeholder="Search a customer ..."
-        class="w-1/3 bg-white border border-gray-300 text-black placeholder-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <button
-        (click)="createCustomer()"
-        type="button"
-        class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-md"
-      >
-        Create Customer
-      </button>
     </div>
 
     <div class="overflow-x-auto rounded-xl border border-gray-200">
       @if (isLoading()) {
-        <p class="p-4 text-center text-gray-400">Loading customers...</p>
-      } @else if (customerList().length === 0) {
-        <p class="p-4 text-center text-gray-500 bg-white">No customers found.</p>
+        <p class="p-4 text-center text-gray-400">Loading bills...</p>
+      } @else if (billList().length === 0) {
+        <p class="p-4 text-center text-gray-500 bg-white">No bills found.</p>
       } @else {
         <table class="w-full border-collapse">
           <thead>
@@ -50,34 +34,25 @@
 
           <tbody>
             @for (row of table.getRowModel().rows; track row.id) {
-              <tr class="odd:bg-white even:bg-gray-50 hover:bg-blue-500/10 transition">
+              <tr class="odd:bg-white even:bg-gray-50 hover:bg-blue-500/10 transition cursor-pointer" (click)="goToBillDetail(row.original.id)">
                 @for (cell of row.getVisibleCells(); track cell.id) {
                   <td class="px-4 py-3 border-b border-r border-gray-200 last:border-r-0">
                     @if (cell.column.id === 'actions') {
-                      <!-- Our custom Angular buttons -->
-                      <div class="flex gap-2">
-                        <button
-                          class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded transition"
-                          (click)="editCustomer(row.original.id)"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
-                          (click)="deleteCustomer(row.original.id)"
-                        >
-                          Delete
-                        </button>
-                        <a
-                          [routerLink]="'/bills/'+row.original.id"
-                          class="px-4 py-2 hover:bg-white/10 transition-colors duration-200"
-                        >
-                          Bills
-                        </a>
-
-                      </div>
+<!--                      <div class="flex gap-2">-->
+<!--                        <button-->
+<!--                          class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded transition"-->
+<!--                          (click)="editBill(row.original.id)"-->
+<!--                        >-->
+<!--                          Edit-->
+<!--                        </button>-->
+<!--                        <button-->
+<!--                          class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"-->
+<!--                          (click)="deleteBill(row.original.id)"-->
+<!--                        >-->
+<!--                          Delete-->
+<!--                        </button>-->
+<!--                      </div>-->
                     } @else {
-                      <!-- Regular data cells -->
                       <ng-container
                         *flexRender="cell.column.columnDef.cell; props: cell.getContext(); let cell"
                       >
@@ -89,8 +64,6 @@
               </tr>
             }
           </tbody>
-
-
         </table>
       }
     </div>
@@ -123,10 +96,3 @@
     </div>
   </div>
 </div>
-
-@if (isDeleteModalOpen()) {
-  <app-customers-delete
-    [customerID]="customerToDelete()"
-    (cancel)="cancelDelete()"
-  ></app-customers-delete>
-}

@@ -10,13 +10,13 @@ import {
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {finalize} from 'rxjs';
-import {Router} from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {CustomersDelete} from '../customers-delete/customers-delete';
 
 @Component({
   selector: 'app-customer-list',
   standalone: true,
-  imports: [CommonModule, FlexRenderDirective, FormsModule, CustomersDelete],
+  imports: [CommonModule, FlexRenderDirective, FormsModule, CustomersDelete, RouterLink],
   templateUrl: './customer-list.html',
   styleUrls: ['./customer-list.css'],
 })

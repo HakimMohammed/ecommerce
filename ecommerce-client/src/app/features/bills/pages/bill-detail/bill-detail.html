@@ -1,0 +1,50 @@
+<div class="flex flex-col bg-gray-100 text-black p-10 rounded-xl min-h-screen">
+  <div class="card px-10 py-4 bg-white text-black shadow-lg rounded-xl">
+    <header class="flex flex-col items-start -ms-4">
+      <h1 class="text-4xl font-bold text-blue-600">Bill Details</h1>
+      <p class="text-gray-500">Review the details of the selected bill</p>
+    </header>
+
+    @if (isLoading()) {
+      <p class="p-4 text-center text-gray-400">Loading bill details...</p>
+    } @else if (bill(); as currentBill) {
+      <div class="mt-6">
+        <div class="mb-4">
+          <h2 class="text-2xl font-semibold">Bill ID: {{ currentBill.id }}</h2>
+          <p class="text-gray-600">Date: {{ currentBill.billingDate | date: 'medium' }}</p>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-2">Products</h3>
+        <div class="overflow-x-auto rounded-xl border border-gray-200">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-blue-500 text-white">
+                <th class="px-4 py-3 text-left font-semibold uppercase text-sm">Product ID</th>
+                <th class="px-4 py-3 text-left font-semibold uppercase text-sm">Price</th>
+                <th class="px-4 py-3 text-left font-semibold uppercase text-sm">Quantity</th>
+                <th class="px-4 py-3 text-left font-semibold uppercase text-sm">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of currentBill.products; track item.id) {
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="px-4 py-3 border-b border-gray-200">{{ item.id }}</td>
+                  <td class="px-4 py-3 border-b border-gray-200">{{ item.price | currency }}</td>
+                  <td class="px-4 py-3 border-b border-gray-200">{{ item.quantity }}</td>
+                  <td class="px-4 py-3 border-b border-gray-200">{{ (item.price * item.quantity) | currency }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-4 text-right">
+          <h3 class="text-2xl font-bold">Total: {{ calculateTotal(currentBill) | currency }}</h3>
+        </div>
+      </div>
+    } @else {
+      <p class="p-4 text-center text-gray-500 bg-white">No bill details found.</p>
+    }
+  </div>
+</div>
+
